@@ -1,0 +1,216 @@
+{
+    "courses": [
+      {
+        "id": "course-001",
+        "title": "Mastering React 19 & Vite",
+        "description": "Learn the fundamentals to advanced levels of building super-fast modern web applications.",
+        "content": "React 19 marks a new era for web development, introducing groundbreaking features like Server Components, Actions, and the highly anticipated 'use' hook for optimized data fetching. In this comprehensive course, we begin by setting up a blazing-fast development environment using Vite, leaving behind the slow build times of legacy tools. \n\nYou will dive deep into the mechanics of concurrent rendering and learn how to handle complex state management using useReducer and Context API effectively. We also explore the new React Compiler, which automatically handles memoization so you can focus on building features instead of manual optimization. \n\nBy the end of this journey, you will have built a production-ready application. This module includes full access to video lectures, source code for every chapter, and an invitation to our private community Discord for real-time support and networking with other modern developers.",
+        "category": "Web Development",
+        "duration": "12 Hours",
+        "level": "Intermediate",
+        "author": "Marcus Sterling",
+        "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.8,
+        "createdAt": "2026-01-15T10:00:00Z",
+        "comments": [
+          {
+            "id": "comm-101",
+            "user": { "id": "user-88", "name": "Sarah Jenkins" },
+            "message": "The explanation is very easy to understand, thank you!",
+            "createdAt": "2026-02-10T14:30:00Z",
+            "likesCount": 12,
+            "likedByUser": false
+          },
+          {
+            "id": "comm-102",
+            "user": { "id": "user-92", "name": "David Miller" },
+            "message": "Will there be an update for Next.js as well?",
+            "createdAt": "2026-02-12T09:15:00Z",
+            "likesCount": 3,
+            "likedByUser": true
+          }
+        ]
+      },
+      {
+        "id": "course-002",
+        "title": "Tailwind CSS Mastery",
+        "description": "Design beautiful UIs without ever leaving your HTML/JSX files.",
+        "content": "Utility-first CSS is more than just a trend; it is a workflow shift that boosts productivity by 10x. This course covers everything from the core concepts of the box model in Tailwind to advanced configuration of the design system via tailwind.config.js. \n\nWe will explore responsive design patterns that work seamlessly across mobile, tablet, and desktop. You will learn how to master the JIT (Just-In-Time) engine, create reusable component patterns without CSS bloat, and handle dark mode implementation natively. \n\nWhether you are a designer looking to code or a developer wanting to improve your UI skills, this comprehensive guide provides all the tools necessary to build modern, accessible, and high-performance user interfaces. You'll finish with a portfolio-ready project that looks stunning on any device.",
+        "category": "Design",
+        "duration": "8 Hours",
+        "level": "Beginner",
+        "author": "Elena Rodriguez",
+        "image": "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.9,
+        "createdAt": "2026-01-20T08:00:00Z",
+        "comments": [
+          {
+            "id": "comm-201",
+            "user": { "id": "user-45", "name": "James Wilson" },
+            "message": "Finally I understand how to use Grid in Tailwind!",
+            "createdAt": "2026-02-18T11:20:00Z",
+            "likesCount": 25,
+            "likedByUser": true
+          }
+        ]
+      },
+      {
+        "id": "course-003",
+        "title": "Fullstack Node.js Essentials",
+        "description": "Build scalable and high-performance server-side applications using Node and Express.",
+        "content": "The backend is the backbone of any application. In this course, we demystify the event-driven architecture of Node.js and show you how to build robust REST APIs from scratch. We begin with the core modules of Node, moving quickly into Express.js for routing and middleware management. \n\nSecurity is a major focus; you will implement JWT-based authentication, password hashing with bcrypt, and protection against common vulnerabilities like SQL Injection and XSS. We also cover database integration with both SQL and NoSQL databases, teaching you how to model data efficiently for scale. \n\nFinally, we look at deployment strategies, logging, and monitoring your application in a production environment. By the end, you'll be comfortable building server-side logic that can handle thousands of concurrent requests with 99.9% uptime.",
+        "category": "Backend",
+        "duration": "15 Hours",
+        "level": "Advanced",
+        "author": "Jordan Smith",
+        "image": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.7,
+        "createdAt": "2026-01-25T12:00:00Z",
+        "comments": [
+          {
+            "id": "comm-301",
+            "user": { "id": "user-12", "name": "Emily Chen" },
+            "message": "Great depth on the middleware section. It really cleared up how data flows through the server.",
+            "createdAt": "2026-02-19T16:45:00Z",
+            "likesCount": 8,
+            "likedByUser": false
+          }
+        ]
+      },
+      {
+        "id": "course-004",
+        "title": "Next.js 15 App Router Deep Dive",
+        "description": "The ultimate guide to Fullstack development with Next.js Server Components.",
+        "content": "Next.js 15 takes the App Router to new heights. This course focuses on the paradigm shift of Server-First development. You will learn about Streaming, Partial Prerendering (PPR), and the new caching mechanisms that make Next.js apps feel instantaneous. \n\nWe build a real-world SaaS product, integrating Server Actions for form handling and advanced SEO techniques. You will also master the middleware layer for edge-computed authentication and internationalization. \n\nJoin us to understand why Next.js is the preferred framework for modern startups and how to optimize your build pipeline for Vercel deployment.",
+        "category": "Web Development",
+        "duration": "18 Hours",
+        "level": "Advanced",
+        "author": "Sarah Drasner",
+        "image": "https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.95,
+        "createdAt": "2026-02-01T09:00:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-005",
+        "title": "UI/UX Design for Developers",
+        "description": "Don't just code, design experiences that users love and return to.",
+        "content": "Most developers struggle with design because they think it's just about colors. This course breaks down design into logical rules: Typography scales, Spacing systems, and Visual Hierarchy. We use Figma to prototype before moving into code. \n\nYou will learn how to create accessible interfaces that meet WCAG standards, ensure high contrast for readability, and design intuitive navigation flows. We also cover the psychology behind user interfaces—how to reduce cognitive load and lead a user's eye to your Call to Action. \n\nTurn your 'developer-looking' projects into polished, professional products that look like they were designed by a top-tier agency.",
+        "category": "Design",
+        "duration": "10 Hours",
+        "level": "Beginner",
+        "author": "Leo Simon",
+        "image": "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.6,
+        "createdAt": "2026-02-03T14:20:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-006",
+        "title": "TypeScript Mastery 2026",
+        "description": "Master advanced TypeScript types, utility types, and enterprise patterns.",
+        "content": "Stop using 'any' and start leveraging the power of TypeScript's type system. This course goes beyond interfaces and types into Generics, Template Literal Types, and Type Guards. \n\nWe explore how to architect large-scale applications with strict typing to prevent runtime errors. You will learn how to migrate legacy JavaScript codebases to TypeScript without losing your mind. \n\nBy the end, you'll be writing cleaner, safer, and more self-documenting code that scales across large teams and complex infrastructures.",
+        "category": "Web Development",
+        "duration": "14 Hours",
+        "level": "Intermediate",
+        "author": "Anders Hejlsberg",
+        "image": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.88,
+        "createdAt": "2026-02-05T11:00:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-007",
+        "title": "Database Design & SQL Pro",
+        "description": "Master Relational Databases, Normalization, and Query Optimization.",
+        "content": "Data is the most valuable asset. Learn how to store it correctly. This course covers PostgreSQL from the ground up, starting with ER Diagrams and Schema Design. \n\nYou will master complex JOINS, Transactions, and Indexing strategies to keep your queries fast as your data grows. We also touch on the hybrid world of Supabase and how to use SQL in a serverless environment. \n\nMaster the language that powers the web's most critical data infrastructures and become the developer who knows exactly how to fetch data efficiently.",
+        "category": "Backend",
+        "duration": "16 Hours",
+        "level": "Intermediate",
+        "author": "Monica Roth",
+        "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.75,
+        "createdAt": "2026-02-07T10:30:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-008",
+        "title": "Python for AI & Automation",
+        "description": "From zero to hero in Python with a focus on data and automation.",
+        "content": "Python is the gateway to AI. This course covers Python syntax, but quickly moves into practical automation scripts and data analysis using Pandas and NumPy. \n\nYou will build bots that scrape websites, automate your daily spreadsheets, and create basic machine learning models. We focus on clean code (PEP 8) and writing scripts that are easy to maintain and deploy to the cloud. \n\nWhether you're looking to switch careers into Data Science or just want to save hours of manual work every week, Python is your new superpower.",
+        "category": "Data Science",
+        "duration": "20 Hours",
+        "level": "Beginner",
+        "author": "Guido van Rossum",
+        "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.9,
+        "createdAt": "2026-02-10T15:00:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-009",
+        "title": "Cybersecurity Fundamentals",
+        "description": "Secure your applications and understand the mind of a hacker.",
+        "content": "Security cannot be an afterthought. Learn about the OWASP Top 10, how to identify XSS, CSRF, and SQL injection before they happen. \n\nWe teach you the defensive mindset: how to implement robust CORS policies, secure your API headers, and handle sensitive user data following modern privacy laws. You'll also learn the basics of penetration testing in a controlled, ethical environment. \n\nProtect your users and your company's reputation by becoming a security-conscious developer in an increasingly dangerous digital world.",
+        "category": "Cybersecurity",
+        "duration": "12 Hours",
+        "level": "Intermediate",
+        "author": "Kevin Mitnick",
+        "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.82,
+        "createdAt": "2026-02-12T13:00:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-010",
+        "title": "Mobile App Dev with React Native",
+        "description": "Build native iOS and Android apps using the React skills you already have.",
+        "content": "Write once, deploy everywhere. React Native allows you to build truly native mobile experiences without learning Swift or Kotlin. \n\nThis course covers the Expo ecosystem, handling mobile-specific navigation with React Navigation, and accessing hardware like Camera and GPS. We focus on performance—avoiding common pitfalls like slow list rendering and bridge-bottlenecks. \n\nBy the end of this course, you'll have a fully functional app published on a testing track for both the App Store and Google Play Store.",
+        "category": "Mobile Development",
+        "duration": "22 Hours",
+        "level": "Intermediate",
+        "author": "William Candillon",
+        "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.7,
+        "createdAt": "2026-02-14T10:45:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-011",
+        "title": "Cloud Architecture with AWS",
+        "description": "Scale your apps to millions of users using Amazon Web Services.",
+        "content": "Learn the core services of AWS: EC2, S3, Lambda, and DynamoDB. We teach you how to move from a single server to a globally distributed, serverless architecture. \n\nYou will learn about Infrastructure as Code (IaC) using Terraform, setting up CI/CD pipelines, and monitoring your cloud costs. We focus on the 'Well-Architected Framework' to ensure your applications are secure, performant, and cost-optimized. \n\nStop worrying about server maintenance and start building resilient systems that grow automatically with your traffic.",
+        "category": "DevOps",
+        "duration": "25 Hours",
+        "level": "Advanced",
+        "author": "Jeff Barr",
+        "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.65,
+        "createdAt": "2026-02-16T08:30:00Z",
+        "comments": []
+      },
+      {
+        "id": "course-012",
+        "title": "Framer Motion for React",
+        "description": "Bring your websites to life with stunning production-ready animations.",
+        "content": "Animation isn't just decoration; it's a way to guide user attention and provide feedback. Learn how to use Framer Motion to create layout transitions, drag-and-drop interfaces, and scroll-linked animations. \n\nWe cover the 'AnimatePresence' component for exit animations and how to use the 'layout' prop for complex, buttery-smooth layout changes. You will learn the performance theory behind animations—ensuring your 60fps experience doesn't drop on low-end devices. \n\nMaster the library that makes websites feel like high-end mobile apps and stand out from the crowd of static web experiences.",
+        "category": "Web Development",
+        "duration": "6 Hours",
+        "level": "Intermediate",
+        "author": "Matt Perry",
+        "image": "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=800&auto=format&fit=crop",
+        "rating": 4.98,
+        "createdAt": "2026-02-18T16:00:00Z",
+        "comments": []
+      }
+    ],
+    "categories": [
+      "Web Development",
+      "Design",
+      "Backend",
+      "Data Science",
+      "Cybersecurity",
+      "Mobile Development",
+      "DevOps"
+    ]
+  }

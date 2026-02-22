@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "frontend-takehome-test-mobile",
-    "slug": "frontend-takehome-test-mobile",
+    "name": "frontend-takehome-test-mobile-kaisa",
+    "slug": "frontend-takehome-test-mobile-kaisa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -22,7 +22,9 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "softwareKeyboardLayoutMode": "adjustResize",
+      "package": "com.kakakhai.frontendtakehometestmobilekaisa"
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +35,20 @@
       "expo-router"
     ],
     "experiments": {
-      "typedRoutes": true
+      "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "063bd20c-89e6-48be-b137-f0971639b5ac"
+      }
+    },
+    "owner": "kakakhai",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/063bd20c-89e6-48be-b137-f0971639b5ac"
     }
   }
 }
