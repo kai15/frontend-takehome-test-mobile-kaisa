@@ -1,22 +1,40 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Avatar, Divider, IconButton, List, SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
-import EmptyData from "./EmptyData";
+import EmptyData from "@/components/EmptyData";
+import Toast from 'react-native-toast-message';
+import Loading from "@/components/Loading";
+
+interface Comments {
+    id: number;
+    user: {
+        id: number;
+        name: string;
+        avatar?: string;
+    };
+    likesCount: number;
+    likedByUser: boolean;
+    message: string;
+    createdAt: string;
+}
 
 interface CommentProps {
     id: any;
     data: any[];
     user: any;
-    setUser: any;
-    setComments: any;
+    refetch: () => Promise<void>;
+    loading: boolean;
 }
 
-export default function CommentCard({ id, data = [], user, setUser, setComments }: CommentProps) {
+export default function CommentCard({ id, data = [], user, refetch, loading }: CommentProps) {
+    const router = useRouter();
     const theme = useTheme();
+    const baseUrl = process.env.EXPO_PUBLIC_API_URL;
     const [newComment, setNewComment] = useState('');
     const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'likes'>('newest');
-    const [tempName, setTempName] = useState('');
+    const [commentId, setCommentId] = useState(0);
+    const [loadingDelete, setLoadingDelete] = useState(false);
 
     const sortedComments = [...data].sort((a, b) => {
         if (sortBy === 'likes') {
@@ -28,55 +46,106 @@ export default function CommentCard({ id, data = [], user, setUser, setComments 
     });
 
     const handleNewComment = async () => {
-        if (!newComment.trim) return;
+        if (!newComment.trim()) return;
 
-        if (newComment.trim()) {
-            const comment = {
-                id: Date.now().toString(),
-                user,
-                message: newComment,
-                createdAt: new Date().toString(),
-                likesCount: 0,
-                likedByUser: false
+        try {
+            const response = await fetch(`${baseUrl}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    courseId: Number(id),
+                    userId: user.id,
+                    message: newComment
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                refetch();
+                setNewComment('');
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Failed',
+                    text2: result.error ?? 'Cannot add new comment!'
+                });
             }
-            setComments([comment, ...data])
-            await AsyncStorage.setItem(`comments-${id}`, JSON.stringify([comment, ...data]))
-            setNewComment('');
-        }
-    }
 
-    const handleLike = async (idComment: any, likedByUser: boolean) => {
-        const tempComment = Array.from(data);
-        const isExist = tempComment.findIndex(v => v.id === idComment);
-        if (isExist > -1) {
-            const countData = likedByUser ? tempComment[isExist].likesCount - 1 : tempComment[isExist].likesCount + 1;
-            tempComment[isExist] = { ...tempComment[isExist], likedByUser: !likedByUser, likesCount: countData }
-            setComments(tempComment);
+        } catch (error) {
+            console.error("Failed to add comment:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Failed',
+                text2: 'Failed to add comment'
+            });
         }
-        await AsyncStorage.setItem(`likedComment-${id}`, JSON.stringify(tempComment));
-    }
+    };
 
-    const handleDelete = async (idComment: any) => {
-        const tempComment = Array.from(data);
-        const isExist = tempComment.findIndex(v => v.id === idComment);
-        if (isExist > -1) {
-            tempComment.splice(isExist, 1)
-            setComments(tempComment);
+    const handleLike = async (commentId: string) => {
+        try {
+            const response = await fetch(`${baseUrl}/comments`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: commentId,
+                    userId: user.id,
+                }),
+            });
+            const result = await response.json();
+            if (response.ok) {
+                refetch();
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Failed',
+                    text2: result.error ?? 'Failed to like comment'
+                });
+            }
+        } catch (error) {
+            console.error("Update failed:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Failed',
+                text2: 'Failed to like comment'
+            });
         }
-        await AsyncStorage.setItem(`comments-${id}`, JSON.stringify(tempComment))
-        await AsyncStorage.setItem(`likedComment-${id}`, JSON.stringify(tempComment));
-    }
+    };
 
-    const handleInput = async (e: any) => {
-        // if (e.key === 'Enter') {
-        // const tempName = (e.target as HTMLInputElement).value;
-        if (tempName.trim()) {
-            const user = { id: `user-${Date.now()}`, name: tempName };
-            await AsyncStorage.setItem('user_session', JSON.stringify(user));
-            setUser(user);
+    const handleDelete = async (commentId: number) => {
+        setCommentId(commentId);
+        setLoadingDelete(true);
+        try {
+            const response = await fetch(`${baseUrl}/comments?id=${commentId}&userId=${user.id}`, {
+                method: 'DELETE',
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: result?.message ?? 'Success deleted comment'
+                });
+                refetch();
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Failed',
+                    text2: result?.error ?? 'Failed deleted comment'
+                });
+            }
+        } catch (error) {
+            console.error("Failed deleted comment:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Failed',
+                text2: 'Failed deleted comment'
+            });
+        } finally {
+            setLoadingDelete(false);
+            setCommentId(0);
         }
-        // }
-    }
+    };
 
     return (
         <View>
@@ -93,19 +162,16 @@ export default function CommentCard({ id, data = [], user, setUser, setComments 
                             value: 'newest',
                             label: 'Newest',
                             icon: 'clock-outline',
-                            // checkedColor: '#06B6D4',
                         },
                         {
                             value: 'oldest',
                             label: 'Oldest',
                             icon: 'clock-outline',
-                            // checkedColor: '#06B6D4',
                         },
                         {
                             value: 'likes',
                             label: 'Top Likes',
                             icon: 'thumb-up-outline',
-                            // checkedColor: '#FACC15',
                         },
                     ]}
                     style={styles.segmentedButtons}
@@ -127,29 +193,22 @@ export default function CommentCard({ id, data = [], user, setUser, setComments 
                         right={<TextInput.Icon icon="send" onPress={handleNewComment} />}
                     />
                 </View> :
-                    <View>
-                        <Text variant="labelMedium" style={{ marginBottom: 8 }}>
-                            Enter your name to comment:
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginBottom: 8 }}>
+                        <Text variant="bodyMedium">Login first to leave a comment. </Text>
+                        <Text
+                            variant="bodyMedium"
+                            style={{ color: theme.colors.primary, fontWeight: '600' }}
+                            onPress={() => router.push('/login')}
+                        >
+                            Login
                         </Text>
-                        <TextInput
-                            mode="outlined"
-                            placeholder="Your Name..."
-                            value={tempName}
-                            onChangeText={setTempName}
-                            outlineStyle={{ borderRadius: 8 }}
-                            returnKeyType="done"
-                            onSubmitEditing={handleInput}
-                            right={
-                                <TextInput.Icon
-                                    icon="check-circle"
-                                    onPress={handleInput}
-                                />
-                            }
-                        />
                     </View>}
             </View>
 
             {sortedComments?.length > 0 ? sortedComments?.map((item) => {
+                const avatarUri = item.user?.avatar;
+                const likedByUser = item.likedByOtherUser?.length > 0 ? item.likedByOtherUser?.find((v: any) => v.userId === user.id) : false
+
                 return (
                     <View key={item.id} style={{ paddingBottom: 5 }}>
                         <List.Item
@@ -157,20 +216,24 @@ export default function CommentCard({ id, data = [], user, setUser, setComments 
                             description={item.message}
                             left={() => (
                                 <View style={{ justifyContent: "center", paddingLeft: 8 }}>
-                                    <Avatar.Text
-                                        size={30}
-                                        label={item?.user?.name.substring(0, 1).toUpperCase()}
-                                        style={{ backgroundColor: theme.colors.outlineVariant }}
-                                    />
+                                    {avatarUri ? (
+                                        <Avatar.Image size={30} source={{ uri: avatarUri }} />
+                                    ) : (
+                                        <Avatar.Text
+                                            size={30}
+                                            label={(item?.user?.name ?? '?').substring(0, 1).toUpperCase()}
+                                            style={{ backgroundColor: theme.colors.outlineVariant }}
+                                        />
+                                    )}
                                 </View>
                             )}
                             right={() => (
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <IconButton
-                                        icon={item.likedByUser ? "thumb-up" : "thumb-up-outline"}
-                                        iconColor={item.likedByUser ? "#FACC15" : theme.colors.outline}
-                                        size={24}
-                                        onPress={() => handleLike(item.id, item.likedByUser)}
+                                        icon={likedByUser ? "thumb-up" : "thumb-up-outline"}
+                                        iconColor={likedByUser ? "#FACC15" : theme.colors.outline}
+                                        size={22}
+                                        onPress={() => handleLike(item.id)}
                                     />
                                     <Text variant="labelSmall">
                                         {item.likesCount ?? 0}
@@ -183,17 +246,16 @@ export default function CommentCard({ id, data = [], user, setUser, setComments 
                             <Text variant="bodySmall" style={{ marginLeft: 55, fontSize: 10 }}>
                                 {new Date(item.createdAt).toLocaleString()}
                             </Text>
-                            {(item?.user?.name === user?.name) && <Text
-                                style={{ color: theme.colors.error, fontSize: 13, fontWeight: "bold" }}
-                                onPress={() => handleDelete(item.id)}
-                            >
-                                Delete
-                            </Text>}
+                            {(item?.user?.name === user?.name) && <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                                <Text style={{ color: theme.colors.error, fontSize: 13, fontWeight: "bold" }}>
+                                    {(loadingDelete && item.id === commentId) ? "Deleting..." : "Delete"}
+                                </Text>
+                            </TouchableOpacity>}
                         </View>
                         <Divider style={{ marginTop: 16 }} />
                     </View>
                 )
-            }) : <EmptyData />}
+            }) : loading ? <Loading /> : <EmptyData description="Be the first to leave a comment" />}
         </View>
     )
 }

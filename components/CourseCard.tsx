@@ -12,7 +12,7 @@ export default function CourseCard({ course }: any) {
             <Card.Cover source={{ uri: course.image }} style={styles.cover} />
             <Card.Content style={styles.content}>
                 <View style={styles.row}>
-                    <Badge style={[styles.badge, {color: theme.colors.onTertiary}]}>{course.category}</Badge>
+                    <Badge style={[styles.badge, { color: theme.colors.onTertiary }]}>{course.category}</Badge>
                     <View style={styles.ratingContainer}>
                         <MaterialCommunityIcons name="star" size={14} color={"#FACC15"} />
                         <Text variant="labelSmall" style={styles.ratingText}>
@@ -31,15 +31,23 @@ export default function CourseCard({ course }: any) {
             </Card.Content>
 
             <Card.Actions style={styles.actions}>
-                <Button
-                    mode="contained"
-                    buttonColor="#06B6D4"
-                    contentStyle={styles.buttonContent}
-                    style={styles.buttonSmall}
-                    labelStyle={styles.buttonLabel}
-                >
-                    Learn More
-                </Button>
+                <View style={styles.row}>
+                    <View style={[styles.row, { justifyContent: "flex-start", gap: 4, marginBottom: 0 }]}>
+                        <MaterialCommunityIcons name="account" size={16} color={theme.colors.onSurface} />
+                        <Text variant="bodyMedium">
+                            {course.author}
+                        </Text>
+                    </View>
+                    <Button
+                        mode="contained"
+                        buttonColor="#06B6D4"
+                        contentStyle={styles.buttonContent}
+                        style={styles.buttonSmall}
+                        labelStyle={styles.buttonLabel}
+                    >
+                        Learn More
+                    </Button>
+                </View>
             </Card.Actions>
         </Card>
     )
@@ -51,7 +59,6 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         borderRadius: 8,
         overflow: 'hidden',
-        // backgroundColor: '#FFFFFF',
         elevation: 2
     },
     cover: {
@@ -65,6 +72,7 @@ const styles = StyleSheet.create({
         marginTop: 12
     },
     row: {
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -72,7 +80,6 @@ const styles = StyleSheet.create({
     },
     badge: {
         backgroundColor: '#00B8DB',
-        // color: '#00B8DB',
         borderRadius: 4,
         paddingHorizontal: 8,
         height: 20,
@@ -82,7 +89,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     desc: {
-        // color: '#666666',
         marginTop: 4
     },
     ratingContainer: {
@@ -95,8 +101,9 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     actions: {
-        paddingBottom: 12,
-        paddingHorizontal: 8
+        paddingBottom: 8,
+        paddingHorizontal: 8,
+        marginTop: 10
     },
     buttonContent: {
         height: 32

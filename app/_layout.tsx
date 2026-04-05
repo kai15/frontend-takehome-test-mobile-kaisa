@@ -2,124 +2,93 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import 'react-native-reanimated';
-import '../global.css';
+import Toast from 'react-native-toast-message';
+import * as Updates from 'expo-updates';
+import '@/global.css';
 
-import { useColorScheme } from '@/components/useColorScheme';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
-import { MD3DarkTheme, MD3LightTheme, PaperProvider, Switch } from 'react-native-paper';
+import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { AuthProvider } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const THEME_SETTING = '@user_theme_preference';
 export default function RootLayout() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [ready, setReady] = useState(false);
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 
   useEffect(() => {
-    const loadTheme = async () => {
-      try {
-        const currentTheme = await AsyncStorage.getItem(THEME_SETTING);
-        if (currentTheme !== null) {
-          setDarkMode(currentTheme === 'dark');
-        }
-      } catch (e) {
-        console.log("Error message", e)
-      } finally {
-        setReady(true);
-      }
-    }
-    loadTheme();
-  }, []);
-
-  const handleTheme = async () => {
-    try {
-      const tempValue = !darkMode;
-      setDarkMode(tempValue);
-      await AsyncStorage.setItem(THEME_SETTING, tempValue ? 'dark' : 'light');
-    } catch (e) {
-      console.log("errror message", e)
-    }
-  }
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
-  if (!ready) return null;
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav darkMode={darkMode} handleTheme={handleTheme} />;
-}
-
-function RootLayoutNav({ darkMode = false, handleTheme }: any) {
-  const colorScheme = useColorScheme();
-  const theme = darkMode ? MD3DarkTheme : MD3LightTheme;
+  if (!loaded) return null;
 
   return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
+  );
+}
+
+function MainApp() {
+  const { darkMode } = useAuth();
+  const theme = darkMode ? MD3DarkTheme : MD3LightTheme;
+
+  useEffect(() => {
+    async function onFetchUpdateAsync() {
+      try {
+        if (__DEV__) return;
+
+        const update = await Updates.checkForUpdateAsync();
+
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        console.log("Auto-update error: ", error);
+      }
+    }
+
+    onFetchUpdateAsync();
+  }, []);
+  
+  return (
     <PaperProvider theme={theme}>
-    {/* <PaperProvider theme={theme}> */}
+      <StatusBar
+        style={darkMode ? "light" : "dark"}
+        backgroundColor="transparent"
+        translucent={true}
+      />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.surface },
           headerTintColor: theme.colors.onSurface,
           headerShadowVisible: false,
-          headerRight: () => {
-            return (
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 5, marginRight: 10 }}>
-                <MaterialCommunityIcons
-                  name={darkMode ? "weather-night" : "weather-sunny"}
-                  size={20}
-                  color={theme.colors.onSurface}
-                />
-                <Switch
-                  value={darkMode}
-                  onValueChange={handleTheme}
-                  color="#06B6D4"
-                />
-              </View>
-            )
+          contentStyle: {
+            backgroundColor: theme.colors.surface
           }
         }}
       >
-        <Stack.Screen name="index" options={{ title: "Courses" }} />
-        <Stack.Screen 
-          name="course/[id]" 
-          options={{ 
-            title: "Course Detail",
-            headerBackTitle: "Back" 
-          }} 
-        />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="course/[id]" options={{ title: "Course Detail" }} />
       </Stack>
+      <Toast />
     </PaperProvider>
   );
 }
