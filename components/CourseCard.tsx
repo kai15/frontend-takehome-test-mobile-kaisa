@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { Badge, Button, Card, Text, useTheme } from "react-native-paper";
+import { Avatar, Badge, Button, Card, Text, useTheme } from "react-native-paper";
 
 export default function CourseCard({ course }: any) {
     const router = useRouter();
@@ -32,8 +32,12 @@ export default function CourseCard({ course }: any) {
 
             <Card.Actions style={styles.actions}>
                 <View style={styles.row}>
-                    <View style={[styles.row, { justifyContent: "flex-start", gap: 4, marginBottom: 0 }]}>
-                        <MaterialCommunityIcons name="account" size={16} color={theme.colors.onSurface} />
+                    <View style={[styles.row, { justifyContent: "flex-start", gap: 6, marginBottom: 0 }]}>
+                        <Avatar.Text
+                            size={22}
+                            label={(course.author ?? '?').substring(0, 1).toUpperCase()}
+                            style={{ backgroundColor: theme.colors.onSurface }}
+                        />
                         <Text variant="bodyMedium">
                             {course.author}
                         </Text>

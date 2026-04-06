@@ -183,10 +183,10 @@ const ProfileScreen = () => {
                     <View style={styles.minimalHeaderRow}>
                         <View style={styles.avatarWrapper}>
                             {profileData.avatar ? (
-                                <Avatar.Image size={70} source={{ uri: profileData.avatar }} />
+                                <Avatar.Image size={100} source={{ uri: profileData.avatar }} />
                             ) : (
                                 <Avatar.Text
-                                    size={70}
+                                    size={100}
                                     label={(profileData?.name ?? '?').substring(0, 1).toUpperCase()}
                                     style={{ backgroundColor: theme.colors.outlineVariant }}
                                 />

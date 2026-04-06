@@ -34,7 +34,9 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
     const [newComment, setNewComment] = useState('');
     const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'likes'>('newest');
     const [commentId, setCommentId] = useState(0);
+    const [message, setMessage] = useState('');
     const [loadingDelete, setLoadingDelete] = useState(false);
+    const [loadingEdit, setLoadingEdit] = useState(false);
 
     const sortedComments = [...data].sort((a, b) => {
         if (sortBy === 'likes') {
@@ -111,6 +113,44 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
         }
     };
 
+    const handleUpdate = async (commentId: number) => {
+        if (!message.trim()) return;
+        setCommentId(commentId);
+        setLoadingEdit(true);
+        try {
+            const response = await fetch(`${baseUrl}/comments`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: commentId,
+                    userId: user.id,
+                    message
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Comment updated'
+                });
+                setCommentId(0);
+                refetch();
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Failed',
+                    text2: result.error
+                });
+            }
+        } catch (error) {
+            console.error("Update error:", error);
+        } finally {
+            setLoadingEdit(false);
+        }
+    };
+
     const handleDelete = async (commentId: number) => {
         setCommentId(commentId);
         setLoadingDelete(true);
@@ -157,24 +197,37 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
                 <SegmentedButtons
                     value={sortBy}
                     onValueChange={(value) => setSortBy(value as 'newest' | 'oldest' | 'likes')}
+                    theme={{
+                        colors: {
+                            secondaryContainer: '#06B6D4',
+                            onSecondaryContainer: '#FFFFFF',
+                            outline: '#06B6D4',
+                        }
+                    }}
                     buttons={[
                         {
                             value: 'newest',
                             label: 'Newest',
                             icon: 'clock-outline',
+                            checkedColor: '#FFFFFF',
+                            uncheckedColor: '#06B6D4',
                         },
                         {
                             value: 'oldest',
                             label: 'Oldest',
                             icon: 'clock-outline',
+                            checkedColor: '#FFFFFF',
+                            uncheckedColor: '#06B6D4',
                         },
                         {
                             value: 'likes',
                             label: 'Top Likes',
                             icon: 'thumb-up-outline',
+                            checkedColor: '#FFFFFF',
+                            uncheckedColor: '#06B6D4',
                         },
                     ]}
-                    style={styles.segmentedButtons}
+                    style={[styles.segmentedButtons, { borderColor: '#06B6D4' }]}
                 />
             </View>
 
@@ -189,7 +242,7 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
                         value={newComment}
                         onChangeText={setNewComment}
                         style={styles.textArea}
-                        outlineStyle={{ borderRadius: 8 }}
+                        outlineStyle={{ borderRadius: 8, borderColor: '#06B6D4' }}
                         right={<TextInput.Icon icon="send" onPress={handleNewComment} />}
                     />
                 </View> :
@@ -208,14 +261,40 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
             {sortedComments?.length > 0 ? sortedComments?.map((item) => {
                 const avatarUri = item.user?.avatar;
                 const likedByUser = item.likedByOtherUser?.length > 0 ? item.likedByOtherUser?.find((v: any) => v.userId === user.id) : false
+                const isEditingThis = commentId === item.id;
 
                 return (
                     <View key={item.id} style={{ paddingBottom: 5 }}>
                         <List.Item
                             title={item.user?.name}
-                            description={item.message}
+                            description={() => isEditingThis ? (
+                                <View style={{ marginTop: 8 }}>
+                                    <TextInput
+                                        mode="outlined"
+                                        value={message}
+                                        onChangeText={setMessage}
+                                        dense
+                                        multiline
+                                        autoFocus
+                                        outlineStyle={{ borderRadius: 8, borderColor: '#06B6D4' }}
+                                        style={{ paddingVertical: 15 }}
+                                    />
+                                    <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+                                        <TouchableOpacity onPress={() => handleUpdate(item.id)} disabled={loadingEdit}>
+                                            <Text style={{ color: theme.colors.onBackground, fontWeight: 'bold' }}>
+                                                {loadingEdit ? "Saving..." : "Save"}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => setCommentId(0)}>
+                                            <Text style={{ color: theme.colors.onSurface }}>Cancel</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            ) : (
+                                <Text style={{ color: theme.colors.onSurfaceVariant }}>{item.message}</Text>
+                            )}
                             left={() => (
-                                <View style={{ justifyContent: "center", paddingLeft: 8 }}>
+                                <View style={{ justifyContent: "center", paddingLeft: 2 }}>
                                     {avatarUri ? (
                                         <Avatar.Image size={30} source={{ uri: avatarUri }} />
                                     ) : (
@@ -242,15 +321,27 @@ export default function CommentCard({ id, data = [], user, refetch, loading }: C
                             )}
                             titleStyle={{ fontWeight: "bold", color: theme.colors.onSurface }}
                         />
-                        <View style={{ flexDirection: "row", gap: 12, alignItems: "center", marginTop: -10 }}>
+                        <View style={{ flexDirection: "row", gap: 10, alignItems: "center", marginTop: 10 }}>
                             <Text variant="bodySmall" style={{ marginLeft: 55, fontSize: 10 }}>
                                 {new Date(item.createdAt).toLocaleString()}
                             </Text>
-                            {(item?.user?.name === user?.name) && <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                                <Text style={{ color: theme.colors.error, fontSize: 13, fontWeight: "bold" }}>
-                                    {(loadingDelete && item.id === commentId) ? "Deleting..." : "Delete"}
-                                </Text>
-                            </TouchableOpacity>}
+                            {(item?.user?.id === user?.id) && (
+                                <View style={{ flexDirection: 'row', gap: 12 }}>
+                                    <TouchableOpacity onPress={() => {
+                                        setCommentId(item.id);
+                                        setMessage(item.message);
+                                    }}>
+                                        <Text style={{ color: theme.colors.onBackground, fontSize: 13, fontWeight: "bold" }}>
+                                            Edit
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                                        <Text style={{ color: theme.colors.error, fontSize: 13, fontWeight: "bold" }}>
+                                            {(loadingDelete && item.id === commentId) ? "Deleting..." : "Delete"}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>)
+                            }
                         </View>
                         <Divider style={{ marginTop: 16 }} />
                     </View>

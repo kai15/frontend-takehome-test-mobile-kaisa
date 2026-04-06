@@ -127,8 +127,8 @@ export default function CourseScreen() {
                     <RefreshControl
                         refreshing={isRefreshing}
                         onRefresh={onRefresh}
-                        colors={['#5856D6']}
-                        tintColor="#5856D6"
+                        colors={['#06B6D4']}
+                        tintColor="#06B6D4"
                     />
                 }
                 onEndReached={handleLoadMore}

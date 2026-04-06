@@ -30,8 +30,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const loadStorageData = async () => {
       try {
         const savedUser = await AsyncStorage.getItem('user_data');
+        const savedMode = await AsyncStorage.getItem('user_theme_preference');
         if (savedUser) {
           setUser(JSON.parse(savedUser));
+        }
+        if (savedMode) {
+          setDarkMode(savedMode === "dark")
         }
       } catch (e) {
         console.error("Failed load data", e);
@@ -56,9 +60,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!user) return;
 
     const newUser = { ...user, ...updatedData };
-    
+
     setUser(newUser);
-    
+
     await AsyncStorage.setItem('user_data', JSON.stringify(newUser));
   };
 

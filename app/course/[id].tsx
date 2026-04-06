@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Badge, Divider, Text, useTheme } from "react-native-paper";
+import { Avatar, Badge, Divider, Text, useTheme } from "react-native-paper";
 import Toast from 'react-native-toast-message';
 import Loading from '@/components/Loading';
 import { useAuth } from '@/context/AuthContext';
@@ -185,8 +185,8 @@ export default function CourseDetailScreen() {
                         <RefreshControl
                             refreshing={refreshing}
                             onRefresh={onRefresh}
-                            colors={[theme.colors.primary]}
-                            tintColor={theme.colors.primary}
+                            colors={["#06B6D4"]}
+                            tintColor={"#06B6D4"}
                         />
                     }
                 >
@@ -216,7 +216,11 @@ export default function CourseDetailScreen() {
 
                         <View style={styles.infoRow}>
                             <View style={[styles.infoRow, { gap: 4 }]}>
-                                <MaterialCommunityIcons name="account" size={16} color={theme.colors.onSurface} />
+                                <Avatar.Text
+                                    size={20}
+                                    label={(course.author ?? '?').substring(0, 1).toUpperCase()}
+                                    style={{ backgroundColor: theme.colors.onSurface }}
+                                />
                                 <Text>{course.author ?? 0}</Text>
                             </View>
                             <View style={[styles.infoRow, { gap: 4 }]}>

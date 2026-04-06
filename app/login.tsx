@@ -87,6 +87,7 @@ export default function LoginScreen() {
                         <Ionicons name="mail-outline" size={16} color="#8E8E93" style={styles.icon} />
                         <TextInput
                             placeholder="Email Address"
+                            placeholderTextColor={"#666"}
                             style={styles.input}
                             value={email}
                             onChangeText={setEmail}
@@ -99,6 +100,7 @@ export default function LoginScreen() {
                         <Ionicons name="lock-closed-outline" size={16} color="#8E8E93" style={styles.icon} />
                         <TextInput
                             placeholder="Password"
+                            placeholderTextColor={"#666"}
                             style={styles.input}
                             value={password}
                             onChangeText={setPassword}
@@ -118,11 +120,17 @@ export default function LoginScreen() {
                         {loading ? (
                             <ActivityIndicator color="#FFF" size="small" />
                         ) : (
-                            <>
-                                <Text style={styles.loginButtonText}>Sign In</Text>
-                                {/* <Ionicons name="arrow-forward" size={20} color="#FFF" /> */}
-                            </>
+                            <Text style={styles.loginButtonText}>Sign In</Text>
                         )}
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.registerLink}
+                        onPress={() => router.push('/register')}
+                    >
+                        <Text style={styles.registerLinkText}>
+                            Don't have an account? <Text style={styles.linkHighlight}>Sign Up</Text>
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ alignItems: "center" }}>
@@ -221,5 +229,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         marginRight: 10
+    },
+    registerLink: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    registerLinkText: {
+        color: '#FFF',
+        fontSize: 14,
+        opacity: 0.9,
+    },
+    linkHighlight: {
+        fontWeight: '800',
+        textDecorationLine: 'underline',
+        color: '#FFF'
     },
 });
